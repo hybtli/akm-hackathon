@@ -18,9 +18,9 @@ export default function Login() {
         password: password,
       })
       .then((response) => {
-        navigate("/dashboard");
         localStorage.setItem("token", response.data.token);
         enqueueSnackbar("Successfully login", { variant: "success" });
+        navigate("/dashboard");
       })
       .catch((error) => {
         enqueueSnackbar(error.message, { variant: "error" });
