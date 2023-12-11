@@ -1,8 +1,13 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { useSnackbar } from "notistack";
+import { toast } from "react-toastify";
+import success = toast.success;
 
 const CommandInjection = () => {
   const [command, setCommand] = useState<string>("");
+  const [block, setBlock] = useState<boolean>(false);
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const getPublicIP = async () => {
     try {
       const response = await axios.get("https://api64.ipify.org?format=json");
@@ -16,21 +21,20 @@ const CommandInjection = () => {
   const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const ip = await getPublicIP();
-    try {
-      // Make a POST request to a specific endpoint with the message
-      const response = await axios.post(
-        "http://192.168.140.215:8001/api/users",
-        {
-          message: command,
-          ip: ip,
-        }
-      );
-      console.log(response);
-
-      setCommand("");
-    } catch (error) {
-      console.error(error);
-    }
+    const response = await axios
+      .post("https://wafnodeback.onrender.com/api/users", {
+        message: command,
+        ip: ip,
+      })
+      .then((response) => {
+        enqueueSnackbar("Command have sent successfully ", {
+          variant: "success",
+        });
+      })
+      .catch((error) => {
+        enqueueSnackbar(error.message, { variant: "error" });
+      });
+    setCommand("");
   };
 
   return (
@@ -45,7 +49,7 @@ const CommandInjection = () => {
           fontWeight: 400,
         }}
       >
-        01. Command Injection Checker
+        01. Injection Checker
       </p>
       <h2
         className="mb-4 text-4xl tracking-tight font-extrabold text-center"

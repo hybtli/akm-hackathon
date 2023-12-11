@@ -1,27 +1,29 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useSnackbar } from "notistack";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const navigate = useNavigate();
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     await axios
-      .post(`http://192.168.140.215:8001/api/login`, {
+      .post(`https://wafnodeback.onrender.com/api/login`, {
         email: email,
         password: password,
       })
       .then((response) => {
         navigate("/dashboard");
-        console.log(response.data.token);
         localStorage.setItem("token", response.data.token);
+        enqueueSnackbar("Successfully login", { variant: "success" });
       })
-      .catch((err) => {
-        console.error(err);
+      .catch((error) => {
+        enqueueSnackbar(error.message, { variant: "error" });
       });
   };
 

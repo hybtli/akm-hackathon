@@ -92,7 +92,7 @@ const Navbar = () => {
             </li>
             <li>
               <a href="/command-injection">
-                <span style={{ color: "#64ffda" }}>01.</span>Command Injection
+                <span style={{ color: "#64ffda" }}>01.</span>Injection
               </a>
             </li>
             <li>

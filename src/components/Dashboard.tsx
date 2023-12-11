@@ -11,11 +11,14 @@ const Dashboard = () => {
   useEffect(() => {
     (async () => {
       try {
-        const response = await axios.get("http://192.168.140.215:8001/iplist", {
-          headers: {
-            Authorization: "Bearer " + token,
-          },
-        });
+        const response = await axios.get(
+          "https://wafnodeback.onrender.com/iplist",
+          {
+            headers: {
+              Authorization: "Bearer " + token,
+            },
+          }
+        );
         setData(response.data);
       } catch (error) {
         console.error("Error:", error);
