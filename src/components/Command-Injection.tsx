@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useSnackbar } from "notistack";
-import Denied from "./Denied";
+import { useNavigate } from "react-router-dom";
 
 const CommandInjection = () => {
   const [ip, setIP] = useState<string>("");
   const [command, setCommand] = useState<string>("");
   const [blockedIP, setBlockIP] = useState<any>([]);
   const [block, setBlock] = useState<boolean>(false);
-  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+  const { enqueueSnackbar } = useSnackbar();
+  const navigate = useNavigate();
+
   const getPublicIP = async () => {
     try {
       const response = await axios.get("https://api64.ipify.org?format=json");
@@ -39,6 +41,8 @@ const CommandInjection = () => {
     checkBlockedIP();
   }, [blockedIP, ip]);
 
+  // typescript
+
   const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const ip = await getPublicIP();
@@ -59,7 +63,7 @@ const CommandInjection = () => {
   };
 
   if (block) {
-    return <Denied message="Access Denied" />;
+    navigate("/denied");
   }
   return (
     <div className="py-8 lg:py-16 px-4 mx-auto max-w-screen-md" id="waf">

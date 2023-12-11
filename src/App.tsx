@@ -10,6 +10,7 @@ import { SnackbarProvider } from "notistack";
 import Login from "./components/login";
 import Home from "./components/Home";
 import Error from "./components/Error";
+import Denied from "./components/Denied";
 
 function App() {
   const token = localStorage.getItem("token");
@@ -31,6 +32,10 @@ function App() {
           <Routes>
             <Route path="/dashboard" element={<TokenCheck />} />
             <Route path="/command-injection" element={<CommandInjection />} />
+            <Route
+              path="/denied"
+              element={<Denied message="Access Denied" />}
+            />
             <Route path="/login" element={<Login />} />
             <Route path="/" element={<Home />} />
             <Route path="*" element={<Error />} />
