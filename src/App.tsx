@@ -8,7 +8,7 @@ import { enqueueSnackbar, SnackbarProvider } from "notistack";
 
 import Home from "./components/Home";
 import axios from "axios";
-import Denied from "components/Denied";
+import Denied from "./components/Denied";
 
 const getPublicIP = async () => {
   try {
