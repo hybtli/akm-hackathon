@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useSnackbar } from "notistack";
-import { toast } from "react-toastify";
-import success = toast.success;
 
 const CommandInjection = () => {
   const [command, setCommand] = useState<string>("");

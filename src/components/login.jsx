@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useSnackbar } from "notistack";
+import Dashboard from "components/Dashboard";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -20,7 +21,7 @@ export default function Login() {
       .then((response) => {
         localStorage.setItem("token", response.data.token);
         enqueueSnackbar("Successfully login", { variant: "success" });
-        navigate("/dashboard");
+        return <Dashboard />;
       })
       .catch((error) => {
         enqueueSnackbar(error.message, { variant: "error" });
