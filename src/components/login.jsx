@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import { useSnackbar } from "notistack";
 import Dashboard from "./Dashboard";
 
@@ -8,6 +9,7 @@ export default function Login() {
   const [password, setPassword] = useState("");
 
   const { enqueueSnackbar } = useSnackbar();
+  const navigate = useNavigate();
 
   const loggedIn = () => {
     return <Dashboard />;
@@ -23,6 +25,7 @@ export default function Login() {
       .then((response) => {
         localStorage.setItem("token", response.data.token);
         enqueueSnackbar("Successfully login", { variant: "success" });
+        navigate("/dashboard");
         loggedIn();
       })
       .catch((error) => {
