@@ -12,6 +12,7 @@ const CommandInjection = () => {
   const getPublicIP = async () => {
     try {
       const response = await axios.get("https://api64.ipify.org?format=json");
+      setIP(response.data.ip);
       return response.data.ip;
     } catch (error) {
       console.error("Error fetching public IP:", error);
@@ -29,12 +30,14 @@ const CommandInjection = () => {
     })();
   }, []);
 
-  // eslint-disable-next-line array-callback-return
-  blockedIP.map((item: any) => {
-    if (item === ip) {
-      setBlock(true);
-    }
-  });
+  useEffect(() => {
+    const checkBlockedIP = () => {
+      const userBlocked = blockedIP.some((item: any) => item === ip);
+      setBlock(userBlocked);
+    };
+
+    checkBlockedIP();
+  }, [blockedIP, ip]);
 
   const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
