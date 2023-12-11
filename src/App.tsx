@@ -37,7 +37,7 @@ function App() {
 
   useEffect(() => {
     blockedIPs.then((ips: any) => setBlockedIPs(ips));
-  }, []);
+  }, [blockedIPs]);
 
   const isIPBlocked = () => {
     return blockedIPs.includes(getPublicIP());
