@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useSnackbar } from "notistack";
-import Dashboard from "components/Dashboard";
+import Dashboard from "./Dashboard";
 
 export default function Login() {
   const [email, setEmail] = useState("");
