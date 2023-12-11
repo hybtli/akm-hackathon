@@ -22,16 +22,7 @@ const Intro = () => {
           alignItems: "center",
           height: "50vh",
         }}
-      >
-        {/*
-        <label className="swap swap-flip text-9xl">
-          <input type="checkbox" />
-
-          <div className="swap-on">🐐</div>
-          <div className="swap-off">😇</div>
-        </label>
-        */}
-      </div>
+      ></div>
     </section>
   );
 };

@@ -78,7 +78,6 @@ export default function Login() {
                 />
               </div>
 
-              {/* Submit button */}
               <div>
                 <button
                   type="submit"

@@ -24,7 +24,7 @@ const Dashboard = () => {
         console.error("Error:", error);
       }
     })();
-  }, [token]);
+  }, []);
 
   const maliciousCommands = data.filter(
     (item: any) => item.isMalicious === true
