@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useSnackbar } from "notistack";
 import Dashboard from "components/Dashboard";
@@ -8,8 +7,11 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const navigate = useNavigate();
-  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+  const { enqueueSnackbar } = useSnackbar();
+
+  const loggedIn = () => {
+    return <Dashboard />;
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -21,7 +23,7 @@ export default function Login() {
       .then((response) => {
         localStorage.setItem("token", response.data.token);
         enqueueSnackbar("Successfully login", { variant: "success" });
-        return <Dashboard />;
+        loggedIn();
       })
       .catch((error) => {
         enqueueSnackbar(error.message, { variant: "error" });
@@ -32,7 +34,6 @@ export default function Login() {
     <section className="h-screen">
       <div className="container h-full px-6 py-24">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-center justify-center">
-          {/* Left column container with background */}
           <div className="mb-12 md:mb-0">
             <img
               src="https://tecdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.svg"
