@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useSnackbar } from "notistack";
-import Dashboard from "./Dashboard";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -11,11 +10,7 @@ export default function Login() {
   const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
 
-  const loggedIn = () => {
-    return <Dashboard />;
-  };
-
-  const handleSubmit = async (event) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     await axios
       .post(`https://wafnodeback.onrender.com/api/login`, {
@@ -26,7 +21,6 @@ export default function Login() {
         localStorage.setItem("token", response.data.token);
         enqueueSnackbar("Successfully login", { variant: "success" });
         navigate("/dashboard");
-        loggedIn();
       })
       .catch((error) => {
         enqueueSnackbar(error.message, { variant: "error" });
