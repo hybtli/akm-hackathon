@@ -4,7 +4,7 @@ import CommandInjection from "./components/Command-Injection";
 import Navbar from "./components/Navbar";
 import "./App.css";
 import SocialMedias from "./components/SocialMedias";
-import { Routes, Route, redirect } from "react-router-dom";
+import { Routes, Route, redirect, BrowserRouter } from "react-router-dom";
 import { SnackbarProvider } from "notistack";
 
 import Login from "./components/login";
@@ -28,17 +28,15 @@ function App() {
         <Navbar />
         <main className="container flex-1 max-w-3xl px-6 mx-auto space-y-12 xl:max-w-5xl">
           <SocialMedias />
-          <Routes>
-            <Route path="/dashboard" element={<TokenCheck />} />
-            <Route path="/command-injection" element={<CommandInjection />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/" element={<Home />} />
-            <Route path="*" element={<Error />} />
-          </Routes>
-          <Routes></Routes>
-          <Routes></Routes>
-          <Routes></Routes>
-          <Routes></Routes>
+          <BrowserRouter>
+            <Routes>
+              <Route path="/dashboard" element={<TokenCheck />} />
+              <Route path="/command-injection" element={<CommandInjection />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/" element={<Home />} />
+              <Route path="*" element={<Error />} />
+            </Routes>
+          </BrowserRouter>
         </main>
       </div>
     </SnackbarProvider>
