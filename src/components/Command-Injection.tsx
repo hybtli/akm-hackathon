@@ -1,20 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import { useSnackbar } from "notistack";
-import { useNavigate } from "react-router-dom";
 
 const CommandInjection = () => {
-  const [ip, setIP] = useState<string>("");
   const [command, setCommand] = useState<string>("");
-  const [blockedIP, setBlockIP] = useState<any>([]);
-  const [block, setBlock] = useState<boolean>(false);
   const { enqueueSnackbar } = useSnackbar();
-  const navigate = useNavigate();
 
   const getPublicIP = async () => {
     try {
       const response = await axios.get("https://api64.ipify.org?format=json");
-      setIP(response.data.ip);
       return response.data.ip;
     } catch (error) {
       console.error("Error fetching public IP:", error);
@@ -22,31 +16,10 @@ const CommandInjection = () => {
     }
   };
 
-  useEffect(() => {
-    (async () => {
-      const response = await axios
-        .get("https://wafnodeback.onrender.com/blockedips")
-        .then((response) => {
-          setBlockIP(response.data);
-        });
-    })();
-  }, []);
-
-  useEffect(() => {
-    const checkBlockedIP = () => {
-      const userBlocked = blockedIP.some((item: any) => item === ip);
-      setBlock(userBlocked);
-    };
-
-    checkBlockedIP();
-  }, []);
-
-  // typescript
-
   const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const ip = await getPublicIP();
-    const response = await axios
+    await axios
       .post("https://wafnodeback.onrender.com/api/users", {
         message: command,
         ip: ip,
@@ -62,9 +35,6 @@ const CommandInjection = () => {
     setCommand("");
   };
 
-  if (block) {
-    navigate("/denied");
-  }
   return (
     <div className="py-8 lg:py-16 px-4 mx-auto max-w-screen-md" id="waf">
       <p

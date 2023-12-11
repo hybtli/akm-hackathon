@@ -1,53 +1,53 @@
-import React from "react";
-import Dashboard from "./components/Dashboard";
+import React, { useEffect, useState } from "react";
 import CommandInjection from "./components/Command-Injection";
 import Navbar from "./components/Navbar";
 import "./App.css";
 import SocialMedias from "./components/SocialMedias";
-import { Routes, Route, redirect } from "react-router-dom";
-import { SnackbarProvider } from "notistack";
+import { Routes, Route } from "react-router-dom";
+import { enqueueSnackbar, SnackbarProvider } from "notistack";
 
-import Login from "./components/login";
 import Home from "./components/Home";
-import Error from "./components/Error";
-import Denied from "./components/Denied";
+import axios from "axios";
+import Denied from "components/Denied";
+
+const getPublicIP = async () => {
+  try {
+    const response = await axios.get("https://api64.ipify.org?format=json");
+    return response.data.ip;
+  } catch (error) {
+    console.error("Error fetching public IP:", error);
+    return null;
+  }
+};
+
+const blockedIPs = async () => {
+  await axios
+    .get("https://wafnodeback.onrender.com/api/blockedips")
+    .then((response) => {
+      return response.data;
+    })
+    .catch((error) => {
+      enqueueSnackbar(error.blockType, { variant: "error" });
+    });
+};
 
 function App() {
-  const token = localStorage.getItem("token");
+  const [blockedIPs, setBlockedIPs] = useState<any>([]);
+  const [IP, setIP] = useState<string>("");
 
-  const TokenCheck = () => {
-    if (!token) {
-      return <Login />;
-    } else {
-      return <Dashboard />;
-    }
+  useEffect(() => {
+    blockedIPs.then((ips: any) => setBlockedIPs(ips));
+  }, []);
+
+  const isIPBlocked = () => {
+    return blockedIPs.includes(getPublicIP());
   };
 
-  return (
-    <SnackbarProvider>
-      <div className="flex flex-col min-h-screen space-y-12">
-        <Navbar />
-        <main className="container flex-1 max-w-3xl px-6 mx-auto space-y-12 xl:max-w-5xl">
-          <SocialMedias />
-          <Routes>
-            <Route path="/dashboard" element={<TokenCheck />} />
-            <Route path="/command-injection" element={<CommandInjection />} />
-            <Route
-              path="/denied"
-              element={<Denied message="Access Denied" />}
-            />
-            <Route path="/login" element={<Login />} />
-            <Route path="/" element={<Home />} />
-            <Route path="*" element={<Error />} />
-          </Routes>
-          <Routes></Routes>
-          <Routes></Routes>
-          <Routes></Routes>
-          <Routes></Routes>
-        </main>
-      </div>
-    </SnackbarProvider>
-  );
+  if (isIPBlocked()) {
+    return <Denied message="Access Denied" />;
+  } else {
+    return <Home />;
+  }
 }
 
 export default App;
