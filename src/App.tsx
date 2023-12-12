@@ -1,53 +1,48 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
+import Dashboard from "./components/Dashboard";
 import CommandInjection from "./components/Command-Injection";
 import Navbar from "./components/Navbar";
 import "./App.css";
 import SocialMedias from "./components/SocialMedias";
 import { Routes, Route } from "react-router-dom";
-import { enqueueSnackbar, SnackbarProvider } from "notistack";
+import { SnackbarProvider } from "notistack";
 
+import Login from "./components/login";
 import Home from "./components/Home";
-import axios from "axios";
-import Denied from "./components/Denied";
-
-const getPublicIP = async () => {
-  try {
-    const response = await axios.get("https://api64.ipify.org?format=json");
-    return response.data.ip;
-  } catch (error) {
-    console.error("Error fetching public IP:", error);
-    return null;
-  }
-};
-
-const blockedIPs = async () => {
-  await axios
-    .get("https://wafnodeback.onrender.com/api/blockedips")
-    .then((response) => {
-      return response.data;
-    })
-    .catch((error) => {
-      enqueueSnackbar(error.blockType, { variant: "error" });
-    });
-};
+import Error from "./components/Error";
 
 function App() {
-  const [blockedIPs, setBlockedIPs] = useState<any>([]);
-  const [IP, setIP] = useState<string>("");
+  const token = localStorage.getItem("token");
 
-  useEffect(() => {
-    blockedIPs.then((ips: any) => setBlockedIPs(ips));
-  }, [blockedIPs]);
-
-  const isIPBlocked = () => {
-    return blockedIPs.includes(getPublicIP());
+  const TokenCheck = () => {
+    if (!token) {
+      return <Login />;
+    } else {
+      return <Dashboard />;
+    }
   };
 
-  if (isIPBlocked()) {
-    return <Denied message="Access Denied" />;
-  } else {
-    return <Home />;
-  }
+  return (
+    <SnackbarProvider>
+      <div className="flex flex-col min-h-screen space-y-12">
+        <Navbar />
+        <main className="container flex-1 max-w-3xl px-6 mx-auto space-y-12 xl:max-w-5xl">
+          <SocialMedias />
+          <Routes>
+            <Route path="/dashboard" element={<TokenCheck />} />
+            <Route path="/command-injection" element={<CommandInjection />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/" element={<Home />} />
+            <Route path="*" element={<Error />} />
+          </Routes>
+          <Routes></Routes>
+          <Routes></Routes>
+          <Routes></Routes>
+          <Routes></Routes>
+        </main>
+      </div>
+    </SnackbarProvider>
+  );
 }
 
 export default App;
