@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, redirect } from "react-router-dom";
 import { useSnackbar } from "notistack";
 
 export default function Login() {
@@ -20,7 +20,7 @@ export default function Login() {
       .then((response) => {
         localStorage.setItem("token", response.data.token);
         enqueueSnackbar("Successfully login", { variant: "success" });
-        navigate("/dashboard");
+        redirect("/dashboard");
       })
       .catch((error) => {
         enqueueSnackbar(error.message, { variant: "error" });
